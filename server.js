@@ -5,6 +5,7 @@ const passport = require("passport");
 
 //bring in routes
 const users = require("./routes/api/users");
+const players = require("./routes/api/players");
 
 const app = express();
 
@@ -28,6 +29,7 @@ require("./config/passport")(passport);
 
 //use routes
 app.use("/api/users", users);
+app.use("/api/players", players);
 
 const port = process.env.PORT || 5003;
 

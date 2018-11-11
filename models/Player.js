@@ -16,13 +16,12 @@ const PlayerSchema = new Schema({
     type: String,
     required: true
   },
-  cardType: {
-    type: String,
-    required: true
-  },
   //array to hold statistics for each game a player completes
   gameStats: [
     {
+      motm: {
+        type: Boolean
+      },
       matchRating: {
         type: Number
       },
