@@ -20,7 +20,8 @@ const PlayerSchema = new Schema({
   gameStats: [
     {
       motm: {
-        type: Boolean
+        type: Boolean,
+        default: false
       },
       matchRating: {
         type: Number

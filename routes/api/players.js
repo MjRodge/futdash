@@ -18,7 +18,7 @@ router.get("/all", (req, res) => {
 });
 
 // @route   POST api/players
-// @desc    Create/Edit players associated with user
+// @desc    Create players associated with user
 // @access  Private
 router.post(
   "/",
@@ -32,6 +32,7 @@ router.post(
     //implement in future
     //if (req.body.cardType) playerFields.cardType = req.body.cardType;
 
+    //add check to see if player already exists, update if found
     new Player(playerFields)
       .save()
       .then(player => res.json(player))
@@ -52,12 +53,56 @@ router.get(
     Player.find({ user: req.user.id })
       .then(players => {
         if (!players) {
+          //error not being thrown, fix later
           errors.noPlayers = "You have no saved players";
           return res.status(404).json(errors);
         }
         res.json(players);
       })
       .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   POST api/players/stats/:player_id
+// @desc    Record game stats of a player
+// @access  Private
+router.post(
+  "/stats/:player_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Player.findById(req.params.player_id)
+      .then(player => {
+        const stats = {
+          motm: req.body.motm,
+          matchRating: req.body.matchRating,
+          goals: req.body.goals,
+          ownGoals: req.body.ownGoals,
+          assists: req.body.assists,
+          shots: req.body.shots,
+          totalShots: req.body.totalShots,
+          passes: req.body.passes,
+          totalPasses: req.body.totalPasses,
+          dribbles: req.body.dribbles,
+          totalDribbles: req.body.totalDribbles,
+          crosses: req.body.crosses,
+          totalCrosses: req.body.totalCrosses,
+          tackles: req.body.tackles,
+          totalTackles: req.body.totalTackles,
+          saves: req.body.saves,
+          fitness: req.body.fitness,
+          yellowCard: req.body.yellowCard,
+          redCard: req.body.redCard
+        };
+        //add players stats to start of array
+        player.gameStats.unshift(stats);
+        player
+          .save()
+          .then(player => res.json(player))
+          .catch(err => res.json(err));
+      })
+      .catch(err =>
+        res.status(404).json({ playerNotFound: "Player not found" })
+      );
   }
 );
 
