@@ -66,16 +66,19 @@ const PlayerSchema = new Schema({
         type: Number
       },
       saves: {
-        type: Number
+        type: Number,
+        default: 0
       },
       fitness: {
         type: Number
       },
       yellowCard: {
-        type: Number
+        type: Number,
+        default: 0
       },
       redCard: {
-        type: Number
+        type: Number,
+        default: 0
       },
       date: {
         type: Date,

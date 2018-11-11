@@ -63,6 +63,28 @@ router.get(
   }
 );
 
+// @route   GET api/players/:player_id
+// @desc    Get single player associated with user
+// @access  Private
+router.get(
+  "/:player_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Player.findById(req.params.player_id)
+      .then(player => {
+        if (req.user.id !== player.user) {
+          return res
+            .status(404)
+            .json({
+              playerNotOwned: "This player record belongs to another user"
+            });
+        }
+        res.json(player);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
 // @route   POST api/players/stats/:player_id
 // @desc    Record game stats of a player
 // @access  Private
