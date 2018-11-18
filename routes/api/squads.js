@@ -19,6 +19,28 @@ router.get("/all", (req, res) => {
     .catch(err => res.status(404).json(err));
 });
 
+// @route   GET api/squads/
+// @desc    Get all squads associated with user
+// @access  Private
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //find all squads owned by user
+    const errors = {};
+    Squad.find({ user: req.user.id })
+      .then(squads => {
+        if (!squads) {
+          //error not being thrown, fix later
+          errors.noSquads = "You have no saved squads";
+          return res.status(404).json(errors);
+        }
+        res.json(squads);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
 // @route   POST api/squads
 // @desc    Create squads associated with user
 // @access  Private
