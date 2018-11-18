@@ -27,13 +27,16 @@ const PlayerSchema = new Schema({
         type: Number
       },
       goals: {
-        type: Number
+        type: Number,
+        default: 0
       },
       ownGoals: {
-        type: Number
+        type: Number,
+        default: 0
       },
       assists: {
-        type: Number
+        type: Number,
+        default: 0
       },
       shots: {
         type: Number
