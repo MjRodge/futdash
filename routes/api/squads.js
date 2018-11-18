@@ -61,4 +61,40 @@ router.post(
   }
 );
 
+// @route   POST api/squads/:squad_id
+// @desc    Add player to squad
+// @access  Private
+router.post(
+  "/:squad_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Squad.findById(req.params.squad_id)
+      .then(squad => {
+        if (req.user.id === squad.user) {
+          return res.status(404).json({
+            squadNotOwned: "This squad record belongs to another user"
+          });
+        }
+        const squadPlayerFields = {};
+        Player.findById(req.body.playerId)
+          .then(player => {
+            squadPlayerFields.player = player;
+            if (req.body.position)
+              squadPlayerFields.position = req.body.position;
+            squad.players.push(squadPlayerFields);
+            squad
+              .save()
+              .then(updatedSquad => res.json(updatedSquad))
+              .catch(err => res.json(err));
+          })
+          .catch(err =>
+            res.status(404).json({ noPlayer: "This player does not exist" })
+          );
+      })
+      .catch(err =>
+        res.status(404).json({ noSquad: "This squad does not exist" })
+      );
+  }
+);
+
 module.exports = router;
