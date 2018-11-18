@@ -70,7 +70,7 @@ router.post(
   (req, res) => {
     Squad.findById(req.params.squad_id)
       .then(squad => {
-        if (req.user.id === squad.user) {
+        if (req.user.id.toString() !== squad.user.toString()) {
           return res.status(404).json({
             squadNotOwned: "This squad record belongs to another user"
           });
@@ -90,6 +90,29 @@ router.post(
           .catch(err =>
             res.status(404).json({ noPlayer: "This player does not exist" })
           );
+      })
+      .catch(err =>
+        res.status(404).json({ noSquad: "This squad does not exist" })
+      );
+  }
+);
+
+// @route   GET api/squads/:squad_id
+// @desc    Get single squad and populate with players
+// @access  Private
+router.get(
+  "/:squad_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Squad.findById(req.params.squad_id)
+      .populate("players.player", ["name", "gameStats"])
+      .then(populatedSquad => {
+        if (req.user.id.toString() !== populatedSquad.user.toString()) {
+          return res.status(404).json({
+            squadNotOwned: "This squad record belongs to another user"
+          });
+        }
+        res.json(populatedSquad);
       })
       .catch(err =>
         res.status(404).json({ noSquad: "This squad does not exist" })
