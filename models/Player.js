@@ -12,10 +12,6 @@ const PlayerSchema = new Schema({
     type: String,
     required: true
   },
-  position: {
-    type: String,
-    required: true
-  },
   //array to hold statistics for each game a player completes
   gameStats: [
     {

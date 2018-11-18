@@ -17,8 +17,11 @@ const SquadSchema = new Schema({
   },
   players: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Player"
+      player: { type: Schema.Types.ObjectId, ref: "Player" },
+      position: {
+        type: String,
+        required: true
+      }
     }
   ],
   date: {
