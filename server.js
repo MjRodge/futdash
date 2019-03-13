@@ -19,7 +19,7 @@ require("dotenv").config();
 const db = process.env.DB_HOST;
 //connect to mongoDB
 mongoose
-  .connect(db)
+  .connect(db, { useNewUrlParser: true })
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
