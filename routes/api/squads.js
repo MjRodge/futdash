@@ -30,8 +30,7 @@ router.get(
     const errors = {};
     Squad.find({ user: req.user.id })
       .then(squads => {
-        if (!squads) {
-          //error not being thrown, fix later
+        if (squads = []) {
           errors.noSquads = "You have no saved squads";
           return res.status(404).json(errors);
         }
