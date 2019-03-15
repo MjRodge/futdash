@@ -12,6 +12,30 @@ const PlayerSchema = new Schema({
     type: String,
     required: true
   },
+  cardType: { 
+    type: String, 
+    enum: [
+      'bronze', 'silver', 'gold', 'totw', 'hero', 'toty', 'recordBreaker', 
+      'stPaddy', 'motm', 'futtiesNom', 'proPlayer', 'tots', 'icons', 'futtiesWin', 
+      'theJourneyIII', 'futChamps', 'otw', 'scream', 'movember', 'sbc', 'premiumSbc',
+      'gotm', 'awardWinner', 'futBirthday', 'futmas', 'futChampionship', 'potmBundes', 
+      'potmPrem', 'europaSbc', 'europaMotm', 'europaPtg', 'clCommon', 'clRare', 'clMotm', 
+      'clPtg', 'flashbackSBC', 'futSwaps', 'totyNom', 'totsNom', 'europaTott', 'clSbc', 
+      'clTott', 'europa',   
+    ] 
+  },
+  ovr: [
+    {
+      rating: { 
+        type: Number,
+        required: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   //array to hold statistics for each game a player completes
   gameStats: [
     {
