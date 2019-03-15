@@ -77,7 +77,7 @@ router.get(
   (req, res) => {
     Player.findById(req.params.player_id)
       .then(player => {
-        if (req.user.id !== player.user) {
+        if (req.user.id === player.user) {
           return res
             .status(404)
             .json({
@@ -140,7 +140,7 @@ router.delete(
   "/:player_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Player.findOneAndRemove(req.params.player_id).then(() => {
+    Player.findOneAndDelete(req.params.player_id).then(() => {
       res.json({ success: "Player successfully deleted" });
     });
   }
