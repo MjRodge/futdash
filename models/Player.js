@@ -22,7 +22,8 @@ const PlayerSchema = new Schema({
       'potmPrem', 'europaSbc', 'europaMotm', 'europaPtg', 'clCommon', 'clRare', 'clMotm', 
       'clPtg', 'flashbackSBC', 'futSwaps', 'totyNom', 'totsNom', 'europaTott', 'clSbc', 
       'clTott', 'europa',   
-    ] 
+    ], 
+    required: true, 
   },
   ovr: [
     {
