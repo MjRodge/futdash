@@ -25,12 +25,17 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //get fields for player
-    const playerFields = {};
+    const playerFields = {
+      ovr: []
+    };
     playerFields.user = req.user.id;
     if (req.body.name) playerFields.name = req.body.name;
-    if (req.body.position) playerFields.position = req.body.position;
-    //implement in future
-    //if (req.body.cardType) playerFields.cardType = req.body.cardType;
+    //if (req.body.position) playerFields.position = req.body.position;
+    if (req.body.cardType) playerFields.cardType = req.body.cardType;
+    const cardRating = {
+      rating: req.body.rating,
+    };
+    playerFields.ovr.unshift(cardRating);
 
     //add check to see if player already exists, update if found
     new Player(playerFields)
@@ -72,7 +77,7 @@ router.get(
   (req, res) => {
     Player.findById(req.params.player_id)
       .then(player => {
-        if (req.user.id !== player.user) {
+        if (req.user.id === player.user) {
           return res
             .status(404)
             .json({
@@ -125,6 +130,19 @@ router.post(
       .catch(err =>
         res.status(404).json({ playerNotFound: "Player not found" })
       );
+  }
+);
+
+// @route   DELETE api/players/:player_id
+// @desc    Delete player
+// @access  Private
+router.delete(
+  "/:player_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Player.findOneAndDelete(req.params.player_id).then(() => {
+      res.json({ success: "Player successfully deleted" });
+    });
   }
 );
 

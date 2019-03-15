@@ -6,6 +6,7 @@ const passport = require("passport");
 //bring in routes
 const users = require("./routes/api/users");
 const players = require("./routes/api/players");
+const squads = require("./routes/api/squads");
 
 const app = express();
 
@@ -18,7 +19,7 @@ require("dotenv").config();
 const db = process.env.DB_HOST;
 //connect to mongoDB
 mongoose
-  .connect(db)
+  .connect(db, { useNewUrlParser: true })
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
@@ -30,6 +31,7 @@ require("./config/passport")(passport);
 //use routes
 app.use("/api/users", users);
 app.use("/api/players", players);
+app.use("/api/squads", squads);
 
 const port = process.env.PORT || 5003;
 
